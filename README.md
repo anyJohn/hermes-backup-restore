@@ -1,5 +1,7 @@
 # Hermes Agent Backup & Restore
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Portable backup and restore scripts for [Hermes Agent](https://hermes-agent.nousresearch.com) data.
 
 ## What Gets Backed Up
@@ -13,47 +15,89 @@ Portable backup and restore scripts for [Hermes Agent](https://hermes-agent.nous
 
 **Excludes:** source code, caches, locks, sockets, logs, runtime ephemera.
 
+## Install
+
+### As a Claude Code / Agent Skill
+
+```bash
+# Install via skills.sh CLI
+npx skills add anyJohn/hermes-backup-restore
+
+# Or clone manually
+git clone https://github.com/anyJohn/hermes-backup-restore.git
+```
+
+### Dependencies
+
+```bash
+# Required
+sudo apt install rsync tar sqlite3   # Debian/Ubuntu
+sudo pacman -S rsync tar sqlite       # Arch
+
+# Optional (for manifest parsing)
+python3
+```
+
 ## Quick Start
 
 ### Backup
 
 ```bash
 # Default backup to ~/hermes-backup-<hostname>-<timestamp>.tar.gz
-./hermes-backup.sh
+./scripts/hermes-backup.sh
 
 # Custom output path
-./hermes-backup.sh -o /path/to/backup.tar.gz
+./scripts/hermes-backup.sh -o /path/to/backup.tar.gz
 
 # Include hermes-agent source code
-./hermes-backup.sh --full
+./scripts/hermes-backup.sh --full
 
 # Back up only a specific profile
-./hermes-backup.sh --profile work
+./scripts/hermes-backup.sh --profile work
 
 # Preview what would be backed up (no archive created)
-./hermes-backup.sh --dry-run
+./scripts/hermes-backup.sh --dry-run
 ```
 
 ### Restore
 
 ```bash
 # Restore everything (overwrites existing)
-./hermes-restore.sh backup.tar.gz
+./scripts/hermes-restore.sh backup.tar.gz
 
 # Preview what would be restored
-./hermes-restore.sh backup.tar.gz --dry-run
+./scripts/hermes-restore.sh backup.tar.gz --dry-run
 
 # Merge (don't overwrite existing files)
-./hermes-restore.sh backup.tar.gz --merge
+./scripts/hermes-restore.sh backup.tar.gz --merge
 
 # Auto-stop running gateway before restore
-./hermes-restore.sh backup.tar.gz --force
+./scripts/hermes-restore.sh backup.tar.gz --force
 
 # Restore into a specific profile
-./hermes-restore.sh backup.tar.gz --profile work
+./scripts/hermes-restore.sh backup.tar.gz --profile work
 
 # Restore to a custom target directory
-./hermes-restore.sh backup.tar.gz -t /target/path
+./scripts/hermes-restore.sh backup.tar.gz -t /target/path
+```
+
+## Cross-Machine Migration
+
+```bash
+# On machine A
+./scripts/hermes-backup.sh -o /tmp/my-backup.tar.gz
+
+# Transfer to machine B
+scp /tmp/my-backup.tar.gz user@machineB:/tmp/
+
+# On machine B
+./scripts/hermes-restore.sh /tmp/my-backup.tar.gz --force
+```
+
+After restoring on a new machine, re-authenticate if API keys or OAuth tokens are machine-specific:
+
+```bash
+hermes setup   # or   hermes model
 ```
 
 ## Features
@@ -74,25 +118,8 @@ Portable backup and restore scripts for [Hermes Agent](https://hermes-agent.nous
 - `sqlite3` (recommended — falls back to raw copy if unavailable)
 - `python3` (for manifest parsing during restore, optional)
 
-## Cross-Machine Migration
-
-```bash
-# On machine A
-./hermes-backup.sh -o /tmp/my-backup.tar.gz
-
-# Transfer to machine B
-scp /tmp/my-backup.tar.gz user@machineB:/tmp/
-
-# On machine B
-./hermes-restore.sh /tmp/my-backup.tar.gz --force
-```
-
-After restoring on a new machine, re-authenticate if API keys or OAuth tokens are machine-specific:
-
-```bash
-hermes setup   # or   hermes model
-```
-
 ## License
 
 MIT
+
+[![skills.sh](https://skills.sh/b/anyJohn/hermes-backup-restore)](https://skills.sh/anyJohn/hermes-backup-restore)

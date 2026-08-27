@@ -12,6 +12,9 @@ description: >
 
 Portable backup and restore scripts for [Hermes Agent](https://hermes-agent.nousresearch.com) data.
 
+Scripts: `scripts/hermes-backup.sh` and `scripts/hermes-restore.sh` (relative to skill root).
+GitHub: https://github.com/anyJohn/hermes-backup-restore
+
 ## What Gets Backed Up
 
 - Config (`config.yaml`, `.env`, `auth.json`)
@@ -38,42 +41,42 @@ Portable backup and restore scripts for [Hermes Agent](https://hermes-agent.nous
 # Back up only a specific profile
 ./scripts/hermes-backup.sh --profile work
 
-# Preview what would be backed up (no archive created)
+# Preview what would be backed up
 ./scripts/hermes-backup.sh --dry-run
 ```
 
 ## Restore
 
 ```bash
-# Restore everything (overwrites existing)
+# Restore everything
 ./scripts/hermes-restore.sh backup.tar.gz
 
-# Preview what would be restored
+# Preview
 ./scripts/hermes-restore.sh backup.tar.gz --dry-run
 
-# Merge (don't overwrite existing files)
+# Merge (don't overwrite existing)
 ./scripts/hermes-restore.sh backup.tar.gz --merge
 
-# Auto-stop running gateway before restore
+# Auto-stop running gateway
 ./scripts/hermes-restore.sh backup.tar.gz --force
 
-# Restore into a specific profile
+# Restore into a profile
 ./scripts/hermes-restore.sh backup.tar.gz --profile work
 
-# Restore to a custom target directory
+# Custom target dir
 ./scripts/hermes-restore.sh backup.tar.gz -t /target/path
 ```
 
 ## Cross-Machine Migration
 
 ```bash
-# On machine A
+# Machine A: backup
 ./scripts/hermes-backup.sh -o /tmp/my-backup.tar.gz
 
-# Transfer to machine B
+# Transfer
 scp /tmp/my-backup.tar.gz user@machineB:/tmp/
 
-# On machine B
+# Machine B: restore
 ./scripts/hermes-restore.sh /tmp/my-backup.tar.gz --force
 ```
 
