@@ -110,13 +110,20 @@ hermes setup   # or   hermes model
 - **Permission hardening**: Config and secrets set to `chmod 600` after restore
 - **Dry run**: Both scripts support `--dry-run` for safe preview
 
-## Requirements
+## Structure
 
-- `bash` 4.0+
-- `rsync`
-- `tar`
-- `sqlite3` (recommended — falls back to raw copy if unavailable)
-- `python3` (for manifest parsing during restore, optional)
+```
+hermes-backup-restore/
+├── skills/
+│   └── hermes-backup-restore/
+│       ├── SKILL.md                          # Frontmatter + usage
+│       └── scripts/
+│           ├── hermes-backup.sh              # Backup script
+│           └── hermes-restore.sh            # Restore script
+├── skills.sh.json                           # Category metadata
+├── README.md
+└── LICENSE
+```
 
 ## License
 
